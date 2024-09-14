@@ -2,7 +2,7 @@ import { input } from "./input.js";
 
 const instructions = input.split("\n").map(Number);
 
-// --- PARt 1 ---
+// --- PART 1 ---
 
 let i = 0;
 let pointer = 0;
