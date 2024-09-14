@@ -39,7 +39,7 @@ class Computer {
 
       this.highestValue = Math.max(
         this.highestValue,
-        Math.max(...this.registers.values())
+        ...this.registers.values()
       );
     }
 
