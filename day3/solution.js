@@ -1,31 +1,111 @@
-const input = 23;
+const input = 312051;
 
 // --- PART 1 ---
 
-let ring = 1;
-let maxI = 9;
-for (let i = 2; i <= 28; i++) {
-  console.log(i, ring, maxI - i);
+let squareLength = 3;
+let counter = 2;
+let x = 0;
+let y = 0;
 
-  if (i >= maxI) {
-    ring++;
-    maxI = i + ring * 8;
+const checkCounter = () => {
+  if (counter === input) {
+    console.log(Math.abs(x) + Math.abs(y));
+    return true;
   }
-}
 
-// 23 7, 0
-// 22 6, 1
-// 21 5, 2
-// 20 4, 1
-// 19 3, 0
-// 18 2, 1
-// 17 1, 2,
-// 16 0, 1
+  counter++;
+  return false;
+};
 
-// 0, 2, 4, 6 = 1
-// 1, 5 = 2
-// 3, 7 = 0
+const traceCircle = () => {
+  x++;
+  if (checkCounter()) return false;
 
-// 1, 8, 16, 24, 32,...
+  for (let i = 0; i < squareLength - 2; i++) {
+    y++;
+    if (checkCounter()) return false;
+  }
 
-// WHY IS THIS SO HARD???
+  for (let i = squareLength; i > 1; i--) {
+    x--;
+    if (checkCounter()) return false;
+  }
+
+  for (let i = 0; i < squareLength - 1; i++) {
+    y--;
+    if (checkCounter()) return false;
+  }
+
+  for (let i = 0; i < squareLength - 1; i++) {
+    x++;
+    if (checkCounter()) return false;
+  }
+
+  squareLength = squareLength + 2;
+
+  return true;
+};
+
+while (traceCircle());
+
+// --- PART 2 ---
+
+let currentValue = 2;
+const values = [{ value: 1, x: 0, y: 0 }];
+squareLength = 3;
+x = 0;
+y = 0;
+
+const checkValue = () => {
+  const neighbors = [
+    values.find((i) => i.x === x + 1 && i.y === y)?.value,
+    values.find((i) => i.x === x + 1 && i.y === y + 1)?.value,
+    values.find((i) => i.x === x && i.y === y + 1)?.value,
+    values.find((i) => i.x === x - 1 && i.y === y + 1)?.value,
+    values.find((i) => i.x === x - 1 && i.y === y)?.value,
+    values.find((i) => i.x === x - 1 && i.y === y - 1)?.value,
+    values.find((i) => i.x === x && i.y === y - 1)?.value,
+    values.find((i) => i.x === x + 1 && i.y === y - 1)?.value,
+  ].filter(Boolean);
+
+  currentValue = neighbors.reduce((acc, curr) => acc + curr);
+  values.push({ value: currentValue, x, y });
+
+  if (currentValue > input) {
+    console.log(currentValue);
+    return true;
+  }
+
+  return false;
+};
+
+const calculateCircle = () => {
+  x++;
+  if (checkValue()) return false;
+
+  for (let i = 0; i < squareLength - 2; i++) {
+    y++;
+    if (checkValue()) return false;
+  }
+
+  for (let i = squareLength; i > 1; i--) {
+    x--;
+    if (checkValue()) return false;
+  }
+
+  for (let i = 0; i < squareLength - 1; i++) {
+    y--;
+    if (checkValue()) return false;
+  }
+
+  for (let i = 0; i < squareLength - 1; i++) {
+    x++;
+    if (checkValue()) return false;
+  }
+
+  squareLength = squareLength + 2;
+
+  return true;
+};
+
+while (calculateCircle());
