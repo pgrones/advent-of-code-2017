@@ -75,12 +75,12 @@ console.log(infectionCounter);
 // --- PART 2 ---
 
 getNextDir = (x, y, dir, nodes) => {
-  const key = [x, y].join();
+  const state = nodes.get([x, y].join()) ?? ".";
   let i = dir - 1;
 
-  if (nodes.get(key) === "W") i = dir;
-  if (nodes.get(key) === "#") i = dir + 1;
-  if (nodes.get(key) === "F") i = dir + 2;
+  if (state === "W") i = dir;
+  if (state === "#") i = dir + 1;
+  if (state === "F") i = dir + 2;
 
   return ((i % 4) + 4) % 4;
 };
@@ -104,7 +104,7 @@ currY = 0;
 currDir = 0;
 infectionCounter = 0;
 
-for (let i = 0; i < 10000000; i++) {
+for (let i = 0; i < 10_000_000; i++) {
   currDir = getNextDir(currX, currY, currDir, nodes);
   infectionCounter += workOnNode(currX, currY);
   const [x, y] = move(currX, currY, currDir);
